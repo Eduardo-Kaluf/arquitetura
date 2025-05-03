@@ -1,0 +1,23 @@
+addi 0 ;; inc 1, r1 ;; 01110101 0x75
+addi 0 ;; inc 2, r3 ;; 01111110 0x7E
+addi 4
+slr r0, r0
+addi 0 ;; loadv 10 ;; 01011010 0x5A
+sub r2, r2
+addi 0 ;; inc 1, r2 ;; 01111001 0x79
+addi 0 ;; loadv 10 ;; 01011010 0x5A
+sub r2, r2
+add r2, r0
+addi -7
+addi -3
+sub r1, r1
+add r1, r0
+addi -7
+addi -3
+addi 0 ;; addv 10 ;; 01101010 0x6A
+_loopInfinite:
+    addi 0 
+    ji _loopInfinite
+
+
+;;0x75 0x7e 0x44 0xe0 0x5a 0xda 0x79 0x5a 0xda 0xc8 0x49 0x4d 0xd5 0xc4 0x49 0x4d 0x6A 0x40 0x1f
