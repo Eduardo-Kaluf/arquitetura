@@ -7,9 +7,6 @@
         <mxCell id="pXhN5apPgbjw7_3pU-Wd-1" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="239" y="510" width="280" height="340" as="geometry" />
         </mxCell>
-        <mxCell id="pXhN5apPgbjw7_3pU-Wd-2" value="ULA" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="489" y="480" width="50" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="pXhN5apPgbjw7_3pU-Wd-3" value="+" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="289" y="560" width="30" height="30" as="geometry" />
         </mxCell>
