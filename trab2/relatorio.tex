@@ -47,7 +47,7 @@
     
     \setlength{\parindent}{15pt}
 
-    O objetivo deste trabalho é a implementação da \textbf{ISA} \textit{Redux-V}, utilizando as ferramentas \href{https://github.com/gboncoffee/egg}{\textbf{EGG}} e \href{https://github.com/logisim-evolution/logisim-evolution}{\textbf{Logisim}}, visando executar o programa Assembly desenvolvido no "Trabalho 1", além da criação de três instruções adicionais próprias, visando otimizar o problema apresentado.
+    O objetivo deste trabalho é a implementação da \textbf{ISA} \textit{Redux-V}, utilizando as ferramentas \href{https://github.com/gboncoffee/egg}{\textbf{EGG}} e \href{https://github.com/logisim-evolution/logisim-evolution}{\textbf{Logisim}}, visando executar o programa Assembly desenvolvido no "Trabalho 1", além da criação de três instruções adicionais próprias, com o propósito de otimizar o problema apresentado.
     Esta \textbf{ISA} é baseada na arquitetura \textit{Risc-V}, porém refatorada a fim de ser mais compacta e amigável para quem está iniciando no mundo da arquitetura de computadores.
     
     Dessa forma, o tamanho da palavra é de oito bits, com endereçamento byte a byte, arquitetura \textbf{Load-Store} e quatro registradores disponíveis.
@@ -95,7 +95,7 @@
 
     A primeira instrução que implementei foi a instrução "Increment", visando um propósito amplo e genérico. No entanto, busquei torná-la o mais útil possível para o usuário, não limitando sua função apenas ao incremento de 1 em algum registrador específico, por exemplo.
 
-    Para isso, desenvolvi um novo formato de instrução, estabelecendo também um comportamento especial ao utilizar o registrador \textbf{R0}. Essa decisão foi tomada porque incrementar diretamente o \textbf{R0} não teria muito sentido, visto que a instrução addi já consegue cumprir essa tarefa de maneira até mais eficiente.
+    Para isso, desenvolvi um novo formato de instrução, estabelecendo também um comportamento especial ao utilizar o registrador \textbf{R0}. Essa decisão foi tomada porque, incrementar diretamente o \textbf{R0} não teria muito sentido, visto que a instrução \textbf{ADDI} já consegue cumprir essa tarefa de maneira até mais eficiente.
 
     \begin{table}[h]
       \captionsetup{labelformat=empty, skip=0pt}
@@ -193,7 +193,7 @@
       \item R0 = 2
       \item R1 = 5
       \item R2 = 8
-      \item R3 = 3
+      \item R3 = X
     \end{itemize}
 
     \textbf{addv 3}
@@ -277,7 +277,6 @@
 
     \renewcommand{\lstlistingname}{Microcódigo}
     \begin{lstlisting}[caption={Load Vector}]
-    \begin{lstlisting}
       _loop:
         st r2, r0
         add r0, r1
@@ -287,7 +286,6 @@
       
     \renewcommand{\lstlistingname}{Microcódigo}
     \begin{lstlisting}[caption={Add Vector}]
-    \begin{lstlisting}
       _program2:
         ld r0, r0   ;; (r0, rx)
         ld r1, r1   ;; (r0, ry)
@@ -525,13 +523,13 @@
       \item ULA
     \end{itemize}
 
-    A seguir, apresenta-se o datapath desta arquitetura em um diagrama de blocos simplificado.
+    A seguir, apresenta-se o \textit{datapath} desta arquitetura em um diagrama de blocos simplificado.
 
     \vspace{1cm}
     \noindent\hspace*{-4cm}\includegraphics[scale=0.5]{datapath.jpg}
     \vspace{1cm}
 
-    A \textbf{ULA} foi projetada para conter oito operações, além de uma saída \textbf{ZERO}, que detecta se o \textbf{RA} é nulo, utilizada em casos de branching
+    A \textbf{ULA} foi projetada para conter oito operações, além de uma saída \textbf{ZERO}, que detecta se o \textbf{RA} é nulo, utilizada em casos de \textit{branching}
 
     A seguir, apresenta-se o projeto da ULA em um diagrama de blocos simplificado.
     
