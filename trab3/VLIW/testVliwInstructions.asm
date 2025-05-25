@@ -21,7 +21,7 @@ slr r0 r2
 nop
 nop
 nop
-slr r0 r2
+srr r2 r0
 
 movh 2
 nop
@@ -32,6 +32,11 @@ movh 0
 nop
 nop
 nop
+
+nop
+nop
+nop
+add r2 r0
 
 st r2 r0
 nop
