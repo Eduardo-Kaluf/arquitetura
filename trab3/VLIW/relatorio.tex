@@ -116,21 +116,37 @@
 
     Para este processador gostariamos de dar a maior quantidade de operações lógicas possíveis ao programador e uma facilidade maior para mexer com loops, adicionando outra instrução branch de controle. Além disso, para que a utilização de predicados seja viável, adaptamos a ISA de modo que ela possua um conjunto de instruções específicas para cada uma das lanes do VLIW e instruções para settar o predicado na parte de controle
 
-    %COLOCAR AS INSTRUÇÕES ESPECIFICAS EM CADA LANE AQUI E EXPLICAR AS 2 INSTRUÇÕES EXTRAS IMPLEMENTADAS, PROVAVELMENTE IMPLEMENTAR CONDICIONAL NO CONTROLE
+    %EXPLICAR AS 2 INSTRUÇÕES EXTRAS IMPLEMENTADAS
 
-    \subsubsection{Instrução 1}
+    \subsubsection{Multi Operations}
 
-    % ADICIONAR O TIPO NOVO DE INSTRUÇÃO (TIPO M -> TIPO MISTO)
+
+    \begin{table}[h]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Formato Novo:} Tipo Misto}
+      \centering
+      \rowcolors{1}{white}{red!20} 
+      \begin{tabular}{|c|*{8}{c|}}
+        \hline
+        \rowcolor{red!50}
+        \multicolumn{9}{|c|}{\textbf{Tipo INC}} \\ \hline
+        \textbf{Bits} & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\ \hline
+        & \multicolumn{4}{c|}{\textbf{Opcode}} & \multicolumn{2}{c|}{\textbf{Ra}} & \multicolumn{2}{c|}{\textbf{Imm Unsigned}} \\ \hline
+      \end{tabular}
+    \end{table}
+
     % fazer tabela das suas operações
-    \subsubsection{Instrução 2}
+
+    \subsubsection{Move}
 
     \subsubsection{Predicação}
-    %ADICIONAR AS TABELAS DAS LANES AQUI E EXPLICAR SOBRE AS INSTRUÇÕES DE SET E AS INSTRUÇÕES QUE UTILIZARÃO PREDICAÇÃO EXPLICAR REGISTRADOR PR (PREDICADO)
+
+    %EXPLICAR SOBRE AS INSTRUÇÕES DE SET E AS INSTRUÇÕES QUE UTILIZARÃO PREDICAÇÃO EXPLICAR REGISTRADOR PR (PREDICADO)
 
     \begin{table}[H]
       \centering
       \captionsetup{labelformat=empty, skip=0pt}
-      \caption{\textbf{Lane 1: Dados}}
+      \caption{\textbf{Lane 1 Instruções: Dados}}
       \rowcolors{1}{white}{gray!20} 
       \begin{tabular}{|c|*{4}{c|}}
         \hline
@@ -160,9 +176,9 @@
     \begin{table}[H]
       \centering
       \captionsetup{labelformat=empty, skip=0pt}
-      \caption{\textbf{Lane 2: Controle}}
+      \caption{\textbf{Lane 2 Instruções: Controle}}
       \rowcolors{1}{white}{gray!20} 
-      \noindent\hspace*{-2.5cm}%
+      \noindent\hspace*{-2.5cm}
       \begin{tabular}{|c|*{4}{c|}}
         \hline
         \rowcolor{gray!50}
@@ -171,16 +187,16 @@
         \multicolumn{1}{|c|}{\textbf{0000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{brzr}}      & \multicolumn{1}{c|}{\textbf{Branch On Zero Register}}   & \multicolumn{1}{c|}{\textbf{if (R[ra] == 0) PC = R[rb] if PR}}        \\ \hline
         \multicolumn{1}{|c|}{\textbf{0001}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{brzi}}      & \multicolumn{1}{c|}{\textbf{Branch On Zero Immediate}}  & \multicolumn{1}{c|}{\textbf{if (R[0] == 0) PC = PC + Imm if PR}}      \\ \hline
         \multicolumn{1}{|c|}{\textbf{0010}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{jr}}        & \multicolumn{1}{c|}{\textbf{Jump Register}}             & \multicolumn{1}{c|}{\textbf{PC = R[rb] if PR}}                        \\ \hline
-        \multicolumn{1}{|c|}{\textbf{0011}}   & \multicolumn{1}{c|}{\textbf{NULL}}  & \multicolumn{1}{c|}{\textbf{NULL}}      & \multicolumn{1}{c|}{\textbf{NULL}}                      & \multicolumn{1}{c|}{\textbf{NULL if PR}}                              \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{mov}}       & \multicolumn{1}{c|}{\textbf{Move}}                      & \multicolumn{1}{c|}{\textbf{R[ra] = R[rb] if PR}}                     \\ \hline
         \multicolumn{1}{|c|}{\textbf{0100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-brzr}}    & \multicolumn{1}{c|}{\textbf{!Branch On Zero Register}}  & \multicolumn{1}{c|}{\textbf{if (R[ra] == 0) PC = R[rb] if !PR}}       \\ \hline
         \multicolumn{1}{|c|}{\textbf{0101}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{f-brzi}}    & \multicolumn{1}{c|}{\textbf{!Branch On Zero Immediate}} & \multicolumn{1}{c|}{\textbf{if (R[0] == 0) PC = PC + Imm if !PR}}     \\ \hline
         \multicolumn{1}{|c|}{\textbf{0110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-jr}}      & \multicolumn{1}{c|}{\textbf{!Jump Register}}            & \multicolumn{1}{c|}{\textbf{PC = R[rb] if !PR}}                       \\ \hline
-        \multicolumn{1}{|c|}{\textbf{0111}}   & \multicolumn{1}{c|}{\textbf{NULL}}  & \multicolumn{1}{c|}{\textbf{f-NULL}}    & \multicolumn{1}{c|}{\textbf{!NULL}}                     & \multicolumn{1}{c|}{\textbf{NULL if !PR}}                             \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0111}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-mov}}     & \multicolumn{1}{c|}{\textbf{!Move}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = R[rb] if !PR}}                    \\ \hline
         \multicolumn{5}{|c|}{\textbf{Setters}}                                                                                                                                                                                                                  \\ \hline 
         \multicolumn{1}{|c|}{\textbf{1000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{sgt}}       & \multicolumn{1}{c|}{\textbf{Set Greater Than}}          & \multicolumn{1}{c|}{\textbf{if R[ra] > R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
         \multicolumn{1}{|c|}{\textbf{1001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{slt}}       & \multicolumn{1}{c|}{\textbf{Set Less Than}}             & \multicolumn{1}{c|}{\textbf{if R[ra] < R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1010}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{seq}}       & \multicolumn{1}{c|}{\textbf{Set Equal}}                 & \multicolumn{1}{c|}{\textbf{if R[ra] < R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{strue}}     & \multicolumn{1}{c|}{\textbf{Set True}}                  & \multicolumn{1}{c|}{\textbf{NULL}}                                    \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1010}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{seq}}       & \multicolumn{1}{c|}{\textbf{Set Equal}}                 & \multicolumn{1}{c|}{\textbf{if R[ra] = R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{strue}}     & \multicolumn{1}{c|}{\textbf{Set True}}                  & \multicolumn{1}{c|}{\textbf{R[pr] := 1}}                              \\ \hline
         \multicolumn{1}{|c|}{\textbf{1100}}   & \multicolumn{1}{c|}{\textbf{EMPTY}} & \multicolumn{1}{c|}{\textbf{EMPTY}}     & \multicolumn{1}{c|}{\textbf{EMPTY}}                     & \multicolumn{1}{c|}{\textbf{EMPTY}}                                   \\ \hline
         \multicolumn{1}{|c|}{\textbf{1101}}   & \multicolumn{1}{c|}{\textbf{EMPTY}} & \multicolumn{1}{c|}{\textbf{EMPTY}}     & \multicolumn{1}{c|}{\textbf{EMPTY}}                     & \multicolumn{1}{c|}{\textbf{EMPTY}}                                   \\ \hline
         \multicolumn{1}{|c|}{\textbf{1110}}   & \multicolumn{1}{c|}{\textbf{EMPTY}} & \multicolumn{1}{c|}{\textbf{EMPTY}}     & \multicolumn{1}{c|}{\textbf{EMPTY}}                     & \multicolumn{1}{c|}{\textbf{EMPTY}}                                   \\ \hline
@@ -192,7 +208,7 @@
     \begin{table}[H]
       \centering
       \captionsetup{labelformat=empty, skip=0pt}
-      \caption{\textbf{Lanes 3 e 4: Aritmética e Lógica}}
+      \caption{\textbf{Lanes 3 e 4 Instruções: Aritmética e Lógica}}
       \rowcolors{1}{white}{gray!20} 
       \noindent\hspace*{-1cm}%
       \begin{tabular}{|c|*{4}{c|}}
@@ -227,48 +243,111 @@
 
     % EXPLICAR DETALHES DA IMPLEMENTAÇÃO DO HARDWARE, COLOCAR TABELAS DE CONTROLE, DIAGRAMA DE CAIXAS E ETC
 
+
+    \begin{table}[H]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Lane 1 Controle: Dados}}
+      \centering
+      \resizebox{\textwidth}{!}{
+        \begin{tabular}{@{} l c c c c c c @{}}
+          \toprule
+          Mnemonic & OPCODE & MOVL & MOVH & ST & LD & TRUE  \\
+          \midrule
+          ld       & 0000   & 0    & 0    & 0  & 1  & 1     \\
+          st       & 0001   & 0    & 0    & 1  & 0  & 1     \\
+          movh     & 0010   & 0    & 1    & 0  & 0  & 1     \\
+          movl     & 0011   & 1    & 0    & 0  & 0  & 1     \\
+          f-ld     & 0100   & 0    & 0    & 0  & 1  & 0     \\
+          f-st     & 0101   & 0    & 0    & 1  & 0  & 0     \\
+          f-movh   & 0110   & 0    & 1    & 0  & 0  & 0     \\
+          f-movl   & 0111   & 1    & 0    & 0  & 0  & 0     \\
+          empty    & 1000   & x    & x    & x  & x  & x     \\
+          empty    & 1001   & x    & x    & x  & x  & x     \\
+          empty    & 1010   & x    & x    & x  & x  & x     \\
+          empty    & 1011   & x    & x    & x  & x  & x     \\
+          empty    & 1100   & x    & x    & x  & x  & x     \\
+          empty    & 1101   & x    & x    & x  & x  & x     \\
+          empty    & 1110   & x    & x    & x  & x  & x     \\
+          nop      & 1111   & 0    & 0    & 0  & 0  & x     \\
+          \bottomrule
+        \end{tabular}
+      }
+    \end{table}
+
+    \begin{table}[H]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Lane 2 Controle: Branches}}
+      \centering
+      \resizebox{\textwidth}{!}{
+        \begin{tabular}{@{} l c c c c c c c c @{}}
+          \toprule
+          Mnemonic & OPCODE & BOZR & JR & BOZI & MOVE & TRUE & PR\_OP & W\_PR  \\
+          \midrule
+          brzr     & 0000   & 1    & 0  & 0    & 0    & 1    & xx    & 0     \\
+          brzi     & 0001   & 0    & 0  & 1    & 0    & 1    & xx    & 0     \\
+          jr       & 0010   & 0    & 1  & 0    & 0    & 1    & xx    & 0     \\
+          mov      & 0011   & 0    & 0  & 0    & 1    & 1    & xx    & 0     \\
+          f-brzr   & 0100   & 1    & 0  & 0    & 0    & 0    & xx    & 0     \\
+          f-brzi   & 0101   & 0    & 0  & 1    & 0    & 0    & xx    & 0     \\
+          f-jr     & 0110   & 0    & 1  & 0    & 0    & 0    & xx    & 0     \\
+          f-mov    & 0111   & 0    & 0  & 0    & 1    & 0    & xx    & 0     \\
+          sgt      & 1000   & 0    & 0  & 0    & 0    & x    & 00    & 1     \\
+          slt      & 1001   & 0    & 0  & 0    & 0    & x    & 10    & 1     \\
+          seq      & 1010   & 0    & 0  & 0    & 0    & x    & 01    & 1     \\
+          strue    & 1011   & 0    & 0  & 0    & 0    & x    & 11    & 1     \\
+          empty    & 1100   & x    & x  & x    & x    & x    & xx    & x     \\
+          empty    & 1101   & x    & x  & x    & x    & x    & xx    & x     \\
+          empty    & 1110   & x    & x  & x    & x    & x    & xx    & x     \\
+          nop      & 1111   & 0    & 0  & 0    & 0    & x    & xx    & 0     \\
+          \bottomrule
+        \end{tabular}
+      }
+    \end{table}
+
+    \begin{table}[H]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Lane 3 e 4 Controle: Aritmética e Lógica}}
+      \centering
+      \resizebox{\textwidth}{!}{
+        \begin{tabular}{@{} l c c c c @{}}
+          \toprule
+          Mnemonic & OPCODE & OP\_ULA & WE & TRUE  \\
+          \midrule
+          add       & 0000   & 000    & 1  & 1     \\
+          sub       & 0001   & 001    & 1  & 1     \\
+          mult-op   & 0010   & 010    & 1  & 1     \\
+          or        & 0011   & 011    & 1  & 1     \\
+          not       & 0100   & 100    & 1  & 1     \\
+          slr       & 0101   & 101    & 1  & 1     \\
+          srr       & 0110   & 110    & 1  & 1     \\
+          empty     & 0111   & xxx    & x  & x     \\
+          f-add     & 1000   & 000    & 1  & 0     \\
+          f-sub     & 1001   & 001    & 1  & 0     \\
+          f-mult-op & 1010   & 010    & 1  & 0     \\
+          f-or      & 1011   & 011    & 1  & 0     \\
+          f-not     & 1100   & 100    & 1  & 0     \\
+          f-slr     & 1101   & 101    & 1  & 0     \\
+          f-srr     & 1110   & 110    & 1  & 0     \\
+          nop       & 1111   & 111    & 0  & x     \\
+          \bottomrule
+        \end{tabular}
+      }
+    \end{table}
+
+
+
     \subsubsection{Instrução 1}
 
     \subsubsection{Instrução 2}
 
     \subsubsection{Predicação}
+
     % EXPLICAR COMO FOI IMPLEMENTADO
+    % TABELO DO PR_OP
+
 
     \section{Resultado}
 
     % FINALIZAR MOSTRANDO O ASSEMBLY E CONCLUSÃO
 
 \end{document} 
-
-
-    % \begin{table}[H]
-    %   \captionsetup{labelformat=empty, skip=0pt}
-    %   \caption{\textbf{Formato Padrão 2:} Tipo R}
-    %   \rowcolors{1}{white}{gray!20} 
-    %   \noindent\hspace*{-1.75cm}%
-    %   \begin{tabular}{|c|*{4}{c|}}
-    %     \hline
-    %     \rowcolor{gray!50}
-    %     \multicolumn{1}{|c|}{\textbf{Opcode}} & \multicolumn{1}{|c|}{\textbf{Tipo}} & \multicolumn{1}{|c|}{\textbf{Mnemonic}} & \multicolumn{1}{|c|}{\textbf{Nome}}                    & \multicolumn{1}{|c|}{\textbf{Operação}}  \\ \hline
-    %     \multicolumn{5}{|c|}{\textbf{Controle}} \\ \hline 
-    %     \multicolumn{1}{|c|}{\textbf{0000}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{brzr}}      & \multicolumn{1}{c|}{\textbf{Branch On Zero Register}} & \multicolumn{1}{c|}{\textbf{if (R[ra] == 0) PC = R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{0001}}    & \multicolumn{1}{c|}{\textbf{I}}    & \multicolumn{1}{c|}{\textbf{brzi}}        & \multicolumn{1}{c|}{\textbf{Branch On Zero Immediate}}          & \multicolumn{1}{c|}{\textbf{if (R[0] == 0) PC = PC + Imm}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{0010}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{jr}}        & \multicolumn{1}{c|}{\textbf{Jump Register}}                    & \multicolumn{1}{c|}{\textbf{PC = R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{0011}}    & \multicolumn{1}{c|}{\textbf{NULL}} & \multicolumn{1}{c|}{\textbf{NULL}}        & \multicolumn{1}{c|}{\textbf{NULL}}                   & \multicolumn{1}{c|}{\textbf{NULL}}  \\ \hline
-    %     \multicolumn{5}{|c|}{\textbf{Dados}} \\ \hline 
-    %     \multicolumn{1}{|c|}{\textbf{0100}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{ld}}      & \multicolumn{1}{c|}{\textbf{Load}}           & \multicolumn{1}{c|}{\textbf{R[ra] = M[ R[rb] ]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{0101}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{st}}     & \multicolumn{1}{c|}{\textbf{Store}}             & \multicolumn{1}{c|}{\textbf{M[ R[rb] ] = R[ra]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{0110}}    & \multicolumn{1}{c|}{\textbf{I}}    & \multicolumn{1}{c|}{\textbf{movh}}      & \multicolumn{1}{c|}{\textbf{Move High}}              & \multicolumn{1}{c|}{\textbf{R[0] = {Imm, R[0](3:0)}}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{0111}}    & \multicolumn{1}{c|}{\textbf{I}}    & \multicolumn{1}{c|}{\textbf{movl}}       & \multicolumn{1}{c|}{\textbf{Move Low}}               & \multicolumn{1}{c|}{\textbf{R[0] = {R[0](7:4), Imm}}}  \\ \hline
-    %     \multicolumn{5}{|c|}{\textbf{Aritmética e Lógica}} \\ \hline 
-    %     \multicolumn{1}{|c|}{\textbf{1000}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{add}}       & \multicolumn{1}{c|}{\textbf{Add}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] + R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{1001}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{sub}}       & \multicolumn{1}{c|}{\textbf{Sub}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] - R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{1010}}    & \multicolumn{1}{c|}{\textbf{NULL}} & \multicolumn{1}{c|}{\textbf{NULL}}        & \multicolumn{1}{c|}{\textbf{NULL}}                      & \multicolumn{1}{c|}{\textbf{NULL}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{1011}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{or}}       & \multicolumn{1}{c|}{\textbf{Or}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] | R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{1100}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{not}}       & \multicolumn{1}{c|}{\textbf{Not}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = ! R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{1101}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{slr}}       & \multicolumn{1}{c|}{\textbf{Shift Left Register}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] << R[rb]}}  \\ \hline
-    %     \multicolumn{1}{|c|}{\textbf{1110}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{srr}}       & \multicolumn{1}{c|}{\textbf{Shift Right Register}}     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] >> R[rb]}}  \\ \hline
-    %     \multicolumn{5}{|c|}{\textbf{Free Slot}} \\ \hline 
-    %     \multicolumn{1}{|c|}{\textbf{1111}}    & \multicolumn{1}{c|}{\textbf{R}}    & \multicolumn{1}{c|}{\textbf{nop}}       & \multicolumn{1}{c|}{\textbf{No Operation}}   & \multicolumn{1}{c|}{\textbf{}}  \\ \hline
-    %   \end{tabular}
-    % \end{table}
