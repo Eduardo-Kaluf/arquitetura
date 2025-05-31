@@ -14,6 +14,7 @@
 \usepackage{xcolor}
 \usepackage[utf8]{inputenc}
 \usepackage{float}
+\usepackage{textcomp}
 
 \lstdefinelanguage{ReduxAsm}{
   keywords={brzr, ji, ld, st, addi, inc, loadv, addv, not, and, or, xor, add, sub, slr, srr},
@@ -193,8 +194,8 @@
         \multicolumn{1}{|c|}{\textbf{0110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-jr}}      & \multicolumn{1}{c|}{\textbf{!Jump Register}}            & \multicolumn{1}{c|}{\textbf{PC = R[rb] if !PR}}                       \\ \hline
         \multicolumn{1}{|c|}{\textbf{0111}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-mov}}     & \multicolumn{1}{c|}{\textbf{!Move}}                     & \multicolumn{1}{c|}{\textbf{R[ra] = R[rb] if !PR}}                    \\ \hline
         \multicolumn{5}{|c|}{\textbf{Setters}}                                                                                                                                                                                                                  \\ \hline 
-        \multicolumn{1}{|c|}{\textbf{1000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{sgt}}       & \multicolumn{1}{c|}{\textbf{Set Greater Than}}          & \multicolumn{1}{c|}{\textbf{if R[ra] > R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{slt}}       & \multicolumn{1}{c|}{\textbf{Set Less Than}}             & \multicolumn{1}{c|}{\textbf{if R[ra] < R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{sgt}}       & \multicolumn{1}{c|}{\textbf{Set Greater Than}}          & \multicolumn{1}{c|}{\textbf{if R[ra] \texttt{>} R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{slt}}       & \multicolumn{1}{c|}{\textbf{Set Less Than}}             & \multicolumn{1}{c|}{\textbf{if R[ra] \texttt{<} R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
         \multicolumn{1}{|c|}{\textbf{1010}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{seq}}       & \multicolumn{1}{c|}{\textbf{Set Equal}}                 & \multicolumn{1}{c|}{\textbf{if R[ra] = R[rb] R[pr] := 1; R[pr] := 0}} \\ \hline
         \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{strue}}     & \multicolumn{1}{c|}{\textbf{Set True}}                  & \multicolumn{1}{c|}{\textbf{R[pr] := 1}}                              \\ \hline
         \multicolumn{1}{|c|}{\textbf{1100}}   & \multicolumn{1}{c|}{\textbf{EMPTY}} & \multicolumn{1}{c|}{\textbf{EMPTY}}     & \multicolumn{1}{c|}{\textbf{EMPTY}}                     & \multicolumn{1}{c|}{\textbf{EMPTY}}                                   \\ \hline
@@ -218,19 +219,19 @@
         \multicolumn{5}{|c|}{\textbf{Aritmética e Lógica}} \\ \hline 
         \multicolumn{1}{|c|}{\textbf{0000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{add}}       & \multicolumn{1}{c|}{\textbf{Add}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] + R[rb] if PR}}          \\ \hline
         \multicolumn{1}{|c|}{\textbf{0001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{sub}}       & \multicolumn{1}{c|}{\textbf{Sub}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] - R[rb] if PR}}          \\ \hline
-        \multicolumn{1}{|c|}{\textbf{0010}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{mult-op}}   & \multicolumn{1}{c|}{\textbf{Multi Operations}}     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] OP R[0] | !R[0] if PR}}  \\ \hline
-        \multicolumn{1}{|c|}{\textbf{0011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{or}}        & \multicolumn{1}{c|}{\textbf{Or}}                   & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] | R[rb] if PR}}          \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0010}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{mult-op}}   & \multicolumn{1}{c|}{\textbf{Multi Operations}}     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] OP R[0] \texttt{|} !R[0] if PR}}  \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{or}}        & \multicolumn{1}{c|}{\textbf{Or}}                   & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] \texttt{|} R[rb] if PR}}          \\ \hline
         \multicolumn{1}{|c|}{\textbf{0100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{not}}       & \multicolumn{1}{c|}{\textbf{Not}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = ! R[rb] if PR}}                \\ \hline
-        \multicolumn{1}{|c|}{\textbf{0101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{slr}}       & \multicolumn{1}{c|}{\textbf{Shift Left Register}}  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] << R[rb] if PR}}         \\ \hline
-        \multicolumn{1}{|c|}{\textbf{0110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{srr}}       & \multicolumn{1}{c|}{\textbf{Shift Right Register}} & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] >> R[rb] if PR}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{slr}}       & \multicolumn{1}{c|}{\textbf{Shift Left Register}}  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] \texttt{<<} R[rb] if PR}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{srr}}       & \multicolumn{1}{c|}{\textbf{Shift Right Register}} & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] \texttt{>>} R[rb] if PR}}         \\ \hline
         \multicolumn{1}{|c|}{\textbf{0111}}   & \multicolumn{1}{c|}{\textbf{EMPTY}} & \multicolumn{1}{c|}{\textbf{EMPTY}}     & \multicolumn{1}{c|}{\textbf{EMPTY}}                & \multicolumn{1}{c|}{\textbf{EMPTY}}                                \\ \hline
         \multicolumn{1}{|c|}{\textbf{1000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-add}}     & \multicolumn{1}{c|}{\textbf{Add}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] + R[rb] if !PR}}         \\ \hline
         \multicolumn{1}{|c|}{\textbf{1001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-sub}}     & \multicolumn{1}{c|}{\textbf{Sub}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] - R[rb] if !PR}}         \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1010}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{f-mult-op}} & \multicolumn{1}{c|}{\textbf{Multi Operations}}     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] OP R[0] | !R[0] if !PR}} \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-or}}      & \multicolumn{1}{c|}{\textbf{Or}}                   & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] | R[rb] if !PR}}         \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-not}}     & \multicolumn{1}{c|}{\textbf{Not}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = ! R[rb] if !PR}}               \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-slr}}     & \multicolumn{1}{c|}{\textbf{Shift Left Register}}  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] << R[rb] if !PR}}        \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-srr}}     & \multicolumn{1}{c|}{\textbf{Shift Right Register}} & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] >> R[rb] if !PR}}        \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1010}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{f-mult-op}} & \multicolumn{1}{c|}{\textbf{Multi Operations}}     & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] OP R[0] \texttt{|} !R[0] if !PR}} \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-or}}      & \multicolumn{1}{c|}{\textbf{Or}}                   & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] \texttt{|} R[rb] if !PR}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-not}}     & \multicolumn{1}{c|}{\textbf{Not}}                  & \multicolumn{1}{c|}{\textbf{R[ra] = \texttt{!} R[rb] if !PR}}               \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-slr}}     & \multicolumn{1}{c|}{\textbf{Shift Left Register}}  & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] \texttt{<<} R[rb] if !PR}}        \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{f-srr}}     & \multicolumn{1}{c|}{\textbf{Shift Right Register}} & \multicolumn{1}{c|}{\textbf{R[ra] = R[ra] \texttt{>>} R[rb] if !PR}}        \\ \hline
         \multicolumn{5}{|c|}{\textbf{Free Slot}}                                                                                                                                                                                                        \\ \hline 
         \multicolumn{1}{|c|}{\textbf{1111}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{nop}}       & \multicolumn{1}{c|}{\textbf{No Operation}}         & \multicolumn{1}{c|}{\textbf{}}                                     \\ \hline
       \end{tabular}
@@ -242,6 +243,27 @@
     \section{Implementação e Organização}
 
     % EXPLICAR DETALHES DA IMPLEMENTAÇÃO DO HARDWARE, COLOCAR TABELAS DE CONTROLE, DIAGRAMA DE CAIXAS E ETC
+
+
+    \begin{table}[H]
+      \rowcolors{1}{white}{gray!20} 
+      \noindent\hspace*{3cm}%
+      \caption{\textbf{ULA: Controle}}
+      \begin{tabular}{{|c c|}}
+        \hline
+        \rowcolor{gray!50}
+        \multicolumn{1}{|c}{\textbf{Operação}}  & \multicolumn{1}{c|}{\textbf{OP\_ULA}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Add}}       & \multicolumn{1}{c|}{\textbf{000}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Sub}}       & \multicolumn{1}{c|}{\textbf{001}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Mult-op}}   & \multicolumn{1}{c|}{\textbf{010}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Or}}        & \multicolumn{1}{c|}{\textbf{011}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Not}}       & \multicolumn{1}{c|}{\textbf{100}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Sll}}       & \multicolumn{1}{c|}{\textbf{101}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Slr}}       & \multicolumn{1}{c|}{\textbf{110}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Nop}}       & \multicolumn{1}{c|}{\textbf{111}} \\ \hline
+      \end{tabular}
+    \end{table}
+
 
 
     \begin{table}[H]
@@ -336,9 +358,27 @@
 
 
 
-    \subsubsection{Instrução 1}
+    \subsubsection{Multi Operations}
 
-    \subsubsection{Instrução 2}
+    \begin{table}[H]
+      \rowcolors{1}{white}{gray!20} 
+      \noindent\hspace*{3cm}%
+      \caption{\textbf{Multi Operations: Controle}}
+      \begin{tabular}{{|c c|}}
+        \hline
+        \rowcolor{gray!50}
+        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_ULA}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Not}}      & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Xor}}      & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{And}}      & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Xnor}}     & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
+      \end{tabular}
+    \end{table}
+
+
+
+    \subsubsection{Move}
+
 
     \subsubsection{Predicação}
 
