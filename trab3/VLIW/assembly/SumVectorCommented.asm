@@ -1,3 +1,10 @@
+;;seta como true os predicados 
+;;(ira executar todas as instruções até que se mude o set)
+nop 
+strue
+nop
+nop
+
 ;;zera os registradores e r0 = -1
 movh -1 
 nop
@@ -16,9 +23,10 @@ nop
 add r1 r0 
 
 ;;r2 = 12 (tamanho dos vetores)
+;;r3 = 1
 nop
 nop
-nop
+sub r3 r1
 sub r2 r0
 
 ;;salva valor 12 na memoria M[-1]
@@ -27,7 +35,7 @@ nop
 nop 
 nop
 
-//zera ro e r0 = 100 
+//zera r1 e r0 = 100 
 movh 6
 nop
 nop
@@ -44,12 +52,6 @@ movl 1
 nop
 nop
 add r1 r2
-
-;;r3 = 1
-nop
-nop
-nop
-add r3 r0
 
 ;;começo do loop de preencher vetor A
 ;;3 x unrolling preenche de 4 em 4 
