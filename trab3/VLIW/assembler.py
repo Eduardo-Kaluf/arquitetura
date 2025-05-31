@@ -92,6 +92,8 @@ with open(assembly, "r") as inputFile:
 
         if command_name == 'NOP':
             command = '11110000'
+        elif command_name == 'STRUE':
+            command = '10110000'
         elif opcodes[command_name][0] == Type.I.value:
             command = opcodes[command_name][1] + str(to_twos_complement(int(info[1]), 4))
         elif opcodes[command_name][0] == Type.M.value:
