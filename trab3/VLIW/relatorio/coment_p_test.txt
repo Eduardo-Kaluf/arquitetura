@@ -1,0 +1,81 @@
+;;vai executar as proximas instruções até o proximo branch
+nop
+strue
+nop
+nop
+
+;;zera r0 usando xor do mult-ops
+nop
+nop
+mult-op r0 1
+sub r3 r3
+
+;;r0 = 10 e zera r1 e r2 com um 'and' 0
+movl 10
+nop
+mult-op r1 2
+mult-op r2 2
+
+;;r1 e r3 recebe o valor de 10
+;;r2 = 1
+nop
+mov r1 r0
+add r3 r0
+not r2 r2
+
+;; deve executar as instruções normais
+;; predicado se r1 for maior que r2 executa 
+;; as instruções normais até o proximo set
+;; caso seja falso, executa as 'f-'.
+;;zera r0 com xor
+nop
+sgt r1 r2
+mult-op r0 1 
+nop
+
+;;deve executar r1 = r1 - r2
+nop
+nop
+sub r1 r2
+nop
+
+;;r2 nao deve receber valor de r1
+nop
+f-mov r2 r1
+nop
+nop
+
+;; deve executar as instruções 'f-'
+;; se r1 igual a r2 
+nop
+seq r1 r2
+nop
+nop
+
+;; deve guardar o valor 10 no endereço 10 da memoria
+;; deve pular para instrução 'strue'
+;; r2 deve ser igual a 10
+;; não deve zerar r1
+f-st r3 r3 
+f-brzi 2
+f-add r2 r1
+sub r1 r1
+
+;;não deve fazer o load
+f-ld r3 r3
+nop
+nop
+nop
+
+;;seta novamente para true
+;;irá executar normalmente as instruções a partir daqui
+nop 
+strue
+nop
+nop
+
+;;halt
+nop
+brzi 0
+nop
+nop
