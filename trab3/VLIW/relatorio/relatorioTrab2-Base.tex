@@ -16,14 +16,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage{float}
 
-\lstdefinelanguage{ReduxAsm}{
-  keywords={brzr, ji, ld, st, addi, inc, loadv, addv, not, and, or, xor, add, sub, slr, srr},
+\lstdefinelanguage{vliwAssembly}{
+  keywords={brzr, brzi, jr, mov, sgt, slt, seq, strue, add, sub, mult-op, or, not, slr, srr, ld,st,movh,movl,},
   morecomment=[l]{;},
   sensitive=true
 }
 
 \lstset{
-  language=ReduxAsm,
+  language=vliwAssembly,
   basicstyle=\ttfamily\small,
   keywordstyle=\color{blue}\bfseries,
   commentstyle=\color{gray},

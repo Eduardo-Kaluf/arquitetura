@@ -82,7 +82,7 @@
     <comp lib="0" loc="(770,390)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
-      <a name="label" val="Pc_mais_1"/>
+      <a name="label" val="Pc_mais_4"/>
       <a name="output" val="true"/>
       <a name="radix" val="16"/>
       <a name="width" val="8"/>
@@ -642,7 +642,7 @@
     </comp>
     <comp lib="0" loc="(520,710)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="Pc_mais_1"/>
+      <a name="label" val="Pc_mais_4"/>
       <a name="labelfont" val="SansSerif bold 6"/>
       <a name="width" val="8"/>
     </comp>
@@ -650,6 +650,18 @@
       <a name="facing" val="east"/>
       <a name="label" val="RESET"/>
       <a name="labelfont" val="SansSerif plain 6"/>
+    </comp>
+    <comp lib="0" loc="(550,330)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="RA_2_OUT"/>
+      <a name="labelfont" val="SansSerif bold 5"/>
+      <a name="width" val="8"/>
+    </comp>
+    <comp lib="0" loc="(550,350)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="RB_2_OUT"/>
+      <a name="labelfont" val="SansSerif bold 5"/>
+      <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(550,770)" name="Pin">
       <a name="appearance" val="NewPins"/>
@@ -668,18 +680,6 @@
     <comp lib="0" loc="(590,810)" name="Tunnel">
       <a name="label" val="RESET"/>
       <a name="labelfont" val="SansSerif plain 8"/>
-    </comp>
-    <comp lib="0" loc="(610,330)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="RA_2_OUT"/>
-      <a name="labelfont" val="SansSerif bold 5"/>
-      <a name="width" val="8"/>
-    </comp>
-    <comp lib="0" loc="(610,350)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="label" val="RB_2_OUT"/>
-      <a name="labelfont" val="SansSerif bold 5"/>
-      <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(640,630)" name="Tunnel">
       <a name="label" val="RA_ZERO"/>
@@ -727,7 +727,7 @@
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(960,720)" name="Tunnel">
-      <a name="label" val="Pc_mais_1"/>
+      <a name="label" val="Pc_mais_4"/>
       <a name="labelfont" val="SansSerif bold 9"/>
       <a name="width" val="8"/>
     </comp>
@@ -769,7 +769,7 @@
     <comp lib="2" loc="(740,350)" name="Multiplexer">
       <a name="select" val="2"/>
     </comp>
-    <comp lib="3" loc="(670,340)" name="Comparator"/>
+    <comp lib="3" loc="(610,340)" name="Comparator"/>
     <comp lib="4" loc="(1000,730)" name="ROM">
       <a name="appearance" val="logisim_evolution"/>
       <a name="line" val="quad"/>
@@ -922,6 +922,8 @@
     <wire from="(520,710)" to="(550,710)"/>
     <wire from="(530,640)" to="(550,640)"/>
     <wire from="(540,750)" to="(590,750)"/>
+    <wire from="(550,330)" to="(570,330)"/>
+    <wire from="(550,350)" to="(570,350)"/>
     <wire from="(550,640)" to="(550,650)"/>
     <wire from="(550,770)" to="(590,770)"/>
     <wire from="(550,810)" to="(590,810)"/>
@@ -930,15 +932,19 @@
     <wire from="(570,640)" to="(570,650)"/>
     <wire from="(570,640)" to="(590,640)"/>
     <wire from="(580,720)" to="(660,720)"/>
-    <wire from="(610,330)" to="(630,330)"/>
-    <wire from="(610,350)" to="(630,350)"/>
+    <wire from="(610,330)" to="(700,330)"/>
+    <wire from="(610,340)" to="(650,340)"/>
+    <wire from="(610,350)" to="(620,350)"/>
+    <wire from="(620,350)" to="(620,360)"/>
+    <wire from="(620,360)" to="(660,360)"/>
     <wire from="(620,630)" to="(640,630)"/>
     <wire from="(620,650)" to="(640,650)"/>
     <wire from="(620,760)" to="(660,760)"/>
+    <wire from="(650,340)" to="(650,350)"/>
+    <wire from="(650,350)" to="(700,350)"/>
     <wire from="(650,740)" to="(660,740)"/>
-    <wire from="(670,330)" to="(700,330)"/>
-    <wire from="(670,340)" to="(700,340)"/>
-    <wire from="(670,350)" to="(700,350)"/>
+    <wire from="(660,340)" to="(660,360)"/>
+    <wire from="(660,340)" to="(700,340)"/>
     <wire from="(690,360)" to="(700,360)"/>
     <wire from="(720,370)" to="(720,410)"/>
     <wire from="(740,350)" to="(800,350)"/>
