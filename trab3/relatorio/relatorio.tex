@@ -914,6 +914,39 @@
     \section{Vetorial}
 
 
+
+
+    \begin{table}[H]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Controle: Vetorial}}
+      \centering
+      \resizebox{\textwidth}{!}{
+        \begin{tabular}{@{} l c c c c c c c c c c c @{}}
+          \toprule
+          Mnemonic  & OPCODE & ST\_SR & ST\_V & WE\_SR & WE\_V & MOV & REP & BRANCH & LD & OP\_ULA & HEX\_VALUE \\
+          \midrule
+          s.ld      & 0000   & 0      & 0     & 1      & 0     & 0   & 0   & 0      & 1  & 111     & 0x10F      \\
+          s.st      & 0001   & 1      & 0     & 0      & 0     & 0   & 0   & 0      & 0  & 111     & 0x407      \\
+          s.movh    & 0010   & 0      & 0     & 1      & 0     & 1   & 0   & 0      & 0  & 010     & 0x142      \\
+          s.movl    & 0011   & 0      & 0     & 1      & 0     & 1   & 0   & 0      & 0  & 011     & 0x143      \\
+          s.add     & 0100   & 0      & 0     & 1      & 0     & 0   & 0   & 0      & 0  & 100     & 0x104      \\
+          s.sub     & 0101   & 0      & 0     & 1      & 0     & 0   & 0   & 0      & 0  & 101     & 0x105      \\
+          s.and     & 0110   & 0      & 0     & 1      & 0     & 0   & 0   & 0      & 0  & 110     & 0x106      \\
+          s.brzr    & 0111   & 0      & 0     & 0      & 0     & 0   & 0   & 1      & 0  & 111     & 0x017      \\
+          v.ld      & 1000   & 0      & 0     & 0      & 1     & 0   & 0   & 0      & 1  & 111     & 0x08F      \\
+          v.st      & 1001   & 0      & 1     & 0      & 0     & 0   & 0   & 0      & 0  & 111     & 0x207      \\
+          v.movh    & 1010   & 0      & 0     & 0      & 1     & 1   & 0   & 0      & 0  & 010     & 0x0C2      \\
+          v.movl    & 1011   & 0      & 0     & 0      & 1     & 1   & 0   & 0      & 0  & 011     & 0x0C3      \\
+          v.add     & 1100   & 0      & 0     & 0      & 1     & 0   & 0   & 0      & 0  & 100     & 0x084      \\
+          v.sub     & 1101   & 0      & 0     & 0      & 1     & 0   & 0   & 0      & 0  & 101     & 0x085      \\
+          s.inc-ops & 1110   & 0      & 0     & 1      & 0     & 0   & 0   & 0      & 0  & 000     & 0x100      \\
+          s.rep     & 1111   & 0      & 0     & 0      & 0     & 0   & 1   & 0      & 0  & 111     & 0x027      \\
+          \bottomrule
+        \end{tabular}
+      }
+    \end{table}
+
+
     \section{Conclusão}
 
     % CONCLUIR PARA AMBOS OS PROCESSADORES
