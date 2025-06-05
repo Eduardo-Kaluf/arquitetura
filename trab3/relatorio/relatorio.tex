@@ -16,8 +16,14 @@
 \usepackage{float}
 \usepackage{textcomp}
 
+
+
+
+
+
 \lstdefinelanguage{ReduxAsm}{
-  keywords={brzr, ji, ld, st, addi, inc, loadv, addv, not, and, or, xor, add, sub, slr, srr, strue, mult-op, sgt, f-mov, seq, f-st, f-brzi, f-add, f-ld},
+  keywords={brzr, ji, ld, st, addi, inc, loadv, addv, not, and, or, xor, add, sub, slr, srr, strue, mult-op, sgt, f-mov, seq, f-st, f-brzi, f-add, f-ld,
+            s.ld, s.st, s.movh, s.movl, s.add, s.sub, s.and, s.brzr, v.ld, v.st, v.movh, v.movl, v.add, v.sub, s.inc-ops, s.rep},
   morecomment=[l]{;},
   sensitive=true
 }
@@ -56,7 +62,6 @@
 
     VLIW significa "Very long instruction Word" que se traduz para "palavra de instrução muito grande" e a ideia do processador gira exatamente em torno disso, basicamente, iremos ter uma palavra grande que carrega mais de uma instrução dentro dela, no nosso caso, 4 instruções, dessa forma o processador irá executa-las em paralelo aumentando o IPC total.
     No VLIW a responsabilidade de evitar dependencias e escritas simultaneas ficam completamente na mão do compilador, o qual utiliza diversas técnicas como loop unroling e predicação a fim de diminuir a quantidade de NOPS necessários, fazendo com que o código seja executado de maneira mais otimizada.
-
 
     \subsection{ISA}
 
@@ -138,11 +143,12 @@
       \begin{tabular}{|c|*{8}{c|}}
         \hline
         \rowcolor{red!50}
-        \multicolumn{9}{|c|}{\textbf{Tipo INC}} \\ \hline
+        \multicolumn{9}{|c|}{\textbf{Tipo M}} \\ \hline
         \textbf{Bits} & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\ \hline
         & \multicolumn{4}{c|}{\textbf{Opcode}} & \multicolumn{2}{c|}{\textbf{Ra}} & \multicolumn{2}{c|}{\textbf{Imm Unsigned}} \\ \hline
       \end{tabular}
     \end{table}
+
 
     \subsubsection{Move}
 
@@ -164,6 +170,7 @@
       \centering
       \captionsetup{labelformat=empty, skip=0pt}
       \caption{\textbf{Lane 1 Instruções: Dados}}
+      \noindent\hspace*{-1.25cm}
       \rowcolors{1}{white}{gray!20} 
       \begin{tabular}{|c|*{4}{c|}}
         \hline
@@ -195,7 +202,7 @@
       \captionsetup{labelformat=empty, skip=0pt}
       \caption{\textbf{Lane 2 Instruções: Controle}}
       \rowcolors{1}{white}{gray!20} 
-      \noindent\hspace*{-2.5cm}
+      \noindent\hspace*{-3.5cm}
       \begin{tabular}{|c|*{4}{c|}}
         \hline
         \rowcolor{gray!50}
@@ -227,7 +234,7 @@
       \captionsetup{labelformat=empty, skip=0pt}
       \caption{\textbf{Lanes 3 e 4 Instruções: Aritmética e Lógica}}
       \rowcolors{1}{white}{gray!20} 
-      \noindent\hspace*{-1cm}%
+      \noindent\hspace*{-2.5cm}
       \begin{tabular}{|c|*{4}{c|}}
         \hline
         \rowcolor{gray!50}
@@ -253,7 +260,7 @@
       \end{tabular}
     \end{table}
 
-    \section{Implementação e Organização}
+    \subsection{Implementação e Organização}
 
     Na implementação do nosso VLIW consumimos 4 instruções por vez, simulando uma palavra grande dessa maneira, elas são então passadas para os controles que já definem se a instrução deve ou não ser executada com base no predicado.
     Na ULA temos uma saída que retorna zero em todos os 8 bits, utilizada em casos em que a instrução não deve ser executada pelo predicado ou casos de nop. Para cada LANE existe uma UL que faz as lógicas necessárias a fim de retornar o que cada instrução precisa.
@@ -261,7 +268,7 @@
 
     \begin{table}[H]
       \rowcolors{1}{white}{gray!20} 
-      \noindent\hspace*{3cm}
+      \centering
       \caption{\textbf{ULA: Controle}}
       \begin{tabular}{{|c c|}}
         \hline
@@ -373,18 +380,19 @@
     A instrução Multi Operations foi implementada dentro da Ula e pode ser pensada como uma extensão da mesma. A Ula passou a receber 2 bits de controle a mais, vindos da MULT-OPS, que definem qual operação fazer e então, com base no código do Op\_ula é decidido se será escolhida ou não.
     MULT-OPS opera fixamente sobre o R0, o resto do caminho é idêntico a qualquer outra operação Lógica/Aritmética
 
+
     \begin{table}[H]
       \rowcolors{1}{white}{gray!20} 
-      \noindent\hspace*{3cm}
-      \caption{\textbf{Multi Operations: Controle}}
+      \centering
+      \caption{\textbf{Operações do Predicado: Controle}}
       \begin{tabular}{{|c c|}}
         \hline
         \rowcolor{gray!50}
-        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_PR}} \\ \hline
-        \multicolumn{1}{|c}{\textbf{Greater}}  & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Less}}     & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Equal}}    & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Set True}} & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_ULA}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Not}}      & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Xor}}      & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{And}}      & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Xnor}}     & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
       \end{tabular}
     \end{table}
 
@@ -399,20 +407,21 @@
 
     \begin{table}[H]
       \rowcolors{1}{white}{gray!20} 
-      \noindent\hspace*{3cm}
-      \caption{\textbf{Operações do Predicado: Controle}}
+      \centering
+      \caption{\textbf{Multi Operations: Controle}}
       \begin{tabular}{{|c c|}}
         \hline
         \rowcolor{gray!50}
-        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_ULA}} \\ \hline
-        \multicolumn{1}{|c}{\textbf{}}         & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Xor}}      & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{And}}      & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Xnor}}     & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_PR}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Greater}}  & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Less}}     & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Equal}}    & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Set True}} & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
       \end{tabular}
     \end{table}
 
-    \section{Assembly}
+
+    \subsection{Assembly}
 
     Após a implementação da arquitetura junto com as instruções criadas chegamos ao seguinte Assembly:
 
@@ -913,8 +922,83 @@
 
     \section{Vetorial}
 
+    \subsection{Arquitetura}
 
+    No processador vetorial temos 2 caminhos que as instruções podem seguir, o caminho Escalar, que funciona como um monociclo comum e o caminho Vetorial, este possui 4 "lanes" que executam a mesma instrução, cada uma dessas lanes possui seu próprio banco de registradores, memória e ula.
+    A sacada do processador vetorial é que cada uma das lanes possui um ID fixo nos seus respectivos R0s, o que possibilita fazer preenchimento e operações mais eficientes com vetores.
+    É importante ressaltar que não existe instrução que atua de forma escalar e vetorial ao mesmo tempo.
 
+    \subsection{ISA}
+
+    A ISA que iremos utilizar para o nosso Vetorial é a Sagui em Bando (SB).
+    A SB consiste em uma ISA também parecida com reduxV e segue as seguintes especificações:
+    Ela possui 8 bits com 3 registradores de propósito geral para a área scalar, e R0 fixo em 0 além de uma memória exclusiva. A parte vetorial é muito semelhante, porém o R0 varia entre 0 e 3.
+    Assim como o reduxV teremos 4 bits para os opcodes
+    
+    Por padrão, os formatos das instruções são os mesmos do Sagui de Rabo Longo
+
+    \subsection{Motivações e Instruções}
+
+    Para este processador tentamos dar mais opções à parte scalar, facilitando a gama de operações e o número de operações, fazendo com que seja mais fácil interagir com loops e como consequencia mais fácil de utilizar a parte vetorial do processador.
+    Mais que isso, fizemos uma instrução que opera um loop no próprio hardware, dando uma liberdade grande ao programador de como trabalhar com nossa ISA.
+
+    \begin{table}[H]
+      \centering
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Instruções}}
+      \noindent\hspace*{-2.85cm}
+      \rowcolors{1}{white}{gray!20} 
+      \begin{tabular}{|c|*{4}{c|}}
+        \hline
+        \rowcolor{gray!50}
+        \multicolumn{1}{|c|}{\textbf{Opcode}} & \multicolumn{1}{|c|}{\textbf{Tipo}} & \multicolumn{1}{|c|}{\textbf{Mnemonic}} & \multicolumn{1}{|c|}{\textbf{Nome}}                   & \multicolumn{1}{|c|}{\textbf{Operação}}                                 \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.ld}}      & \multicolumn{1}{c|}{\textbf{Load}}                    & \multicolumn{1}{c|}{\textbf{SR[ra] = M[ SR[rb] ]}}                      \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.st}}      & \multicolumn{1}{c|}{\textbf{Store}}                   & \multicolumn{1}{c|}{\textbf{M[ SR[rb] ] = SR[ra]}}                      \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0010}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{s.movh}}    & \multicolumn{1}{c|}{\textbf{Move High}}               & \multicolumn{1}{c|}{\textbf{SR[1] = {Imm., SR[1](3:0)}}}                \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0011}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{s.movl}}    & \multicolumn{1}{c|}{\textbf{Move Low}}                & \multicolumn{1}{c|}{\textbf{SR[1] = {SR[1](7:4), Imm.}}}                \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.add}}     & \multicolumn{1}{c|}{\textbf{Add}}                     & \multicolumn{1}{c|}{\textbf{SR[ra] = SR[ra] \texttt{+} SR[rb]}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.sub}}     & \multicolumn{1}{c|}{\textbf{Sub}}                     & \multicolumn{1}{c|}{\textbf{SR[ra] = SR[ra] \texttt{-} SR[rb]}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0110}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.and}}     & \multicolumn{1}{c|}{\textbf{And}}                     & \multicolumn{1}{c|}{\textbf{SR[ra] = SR[ra] \& SR[rb]}}                 \\ \hline
+        \multicolumn{1}{|c|}{\textbf{0111}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.brzr}}    & \multicolumn{1}{c|}{\textbf{Branch On Zero Register}} & \multicolumn{1}{c|}{\textbf{if (SR[ra] == 0) PC = SR[rb]}}              \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1000}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{v.ld}}      & \multicolumn{1}{c|}{\textbf{Load}}                    & \multicolumn{1}{c|}{\textbf{VR[ra] = M[ VR[rb] ]}}                      \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1001}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{v.st}}      & \multicolumn{1}{c|}{\textbf{Store}}                   & \multicolumn{1}{c|}{\textbf{M[ VR[rb] ] = VR[ra]}}                      \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1010}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{v.movh}}    & \multicolumn{1}{c|}{\textbf{Move High}}               & \multicolumn{1}{c|}{\textbf{VR[1] = {Imm., VR[1](3:0)}}}                \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{v.movl}}    & \multicolumn{1}{c|}{\textbf{Move Low}}                & \multicolumn{1}{c|}{\textbf{VR[1] = {VR[1](7:4), Imm.}}}                \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{v.add}}     & \multicolumn{1}{c|}{\textbf{Add}}                     & \multicolumn{1}{c|}{\textbf{VR[ra] = VR[ra] \texttt{+} VR[rb]}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{v.sub}}     & \multicolumn{1}{c|}{\textbf{Sub}}                     & \multicolumn{1}{c|}{\textbf{VR[ra] = VR[ra] \texttt{-} VR[rb]}}         \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1110}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{s.inc-ops}} & \multicolumn{1}{c|}{\textbf{Inc-Ops}}                 & \multicolumn{1}{c|}{\textbf{SR[ra] = [RA] OP [RB] \texttt{||} OP [RA]}} \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1111}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.rep}}     & \multicolumn{1}{c|}{\textbf{Rep}}                     & \multicolumn{1}{c|}{\textbf{Repeat Next RB Instructions RA times}}      \\ \hline
+      \end{tabular}
+    \end{table}
+
+    \subsubsection{Inc-Ops}
+
+    A instrução Inc-Ops realiza diversas operações com base em um imediato passado e um registrador.
+
+    Segue o seu formato:
+
+    \begin{table}[h]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Formato Novo:} Tipo Misto}
+      \centering
+      \rowcolors{1}{white}{red!20} 
+      \begin{tabular}{|c|*{8}{c|}}
+        \hline
+        \rowcolor{red!50}
+        \multicolumn{9}{|c|}{\textbf{Tipo M}} \\ \hline
+        \textbf{Bits} & 7 & 6 & 5 & 4 & 3 & 2 & 1 & 0 \\ \hline
+        & \multicolumn{4}{c|}{\textbf{Opcode}} & \multicolumn{2}{c|}{\textbf{Ra}} & \multicolumn{2}{c|}{\textbf{Imm}} \\ \hline
+      \end{tabular}
+    \end{table}
+
+    \subsubsection{Rep}
+    
+    A instrução Rep recebe dois registradores, o primeiro (RA) dita a quantidade de vezes que as proximas n instruções (RB) devem ser executadas.
+    
+    \subsection{Implementação e Organização}
+
+    Implementamos o processador vetorial de modo que a leitura da instrução passa um NOP para a parte scalar ou para a parter vetorial, dependendo do que foi recebido. 
+    Além do mais implementamos um pipeline com 5 subdivisões utilizando uma Unidade hazard, o qual atua tanto na parte scalar quanto na parte vetorial.
 
     \begin{table}[H]
       \captionsetup{labelformat=empty, skip=0pt}
@@ -946,9 +1030,46 @@
       }
     \end{table}
 
+    \subsubsection{Inc-Ops}
+
+    Uma novo controle chamado inc-ops foi adicionado a fim de comtemplar a escolha da operação do inc-ops dentro da ula, ou seja, temos um mux para escolher a operação do Inc-Ops e então o seu resultado é passado para o mux normal da Ula.
+
+    \begin{table}[H]
+      \rowcolors{1}{white}{gray!20} 
+      \caption{\textbf{Inc-Ops: Controle}}
+      \centering
+      \begin{tabular}{{|c c|}}
+        \hline
+        \rowcolor{gray!50}
+        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{INC-OPS}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Not}}      & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Inc 1}}    & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Or}}       & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Dec 1}}    & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
+      \end{tabular}
+    \end{table}
+
+    \subsubsection{Rep}
+
+    A instrução Rep utiliza de alguns registradores a parte para saber quando deve parar de realizar a repetição. Quando ela é processada, um desses registradores recebe a quantidade de vezes que as proximas instruções devem ser repetidas, um outro registrador recebe quantas instruções devem ser processadas.
+    Todo clock dimninui o segundo registrador em 1 e quando ele chega em zero ele é retornado para a quantidade de instruções que devem ser repetidas e o primeiro tem seu valor reduzido em 1.
+    Assim conseguimos administrar o total de vezes que as instruções serão repetidas.
+    Por fim, existe um terceiro registrador que guarda o endereço de inicio do loop, toda vez que o segundo registrador é zerado, o valor desse registrador é passado para o PC
+
+    \subsection{Assembly}
+
+    O primeiro assembly criado sem utlizar as instruções extras implementadas ficou da seguinte maneira:
+
+    %% COLOCARE OS DOIS ASSEMBLYS
+
+    Após a implementação das instruções novas conseguimos o seguinte resultado:
+
+
 
     \section{Conclusão}
 
-    % CONCLUIR PARA AMBOS OS PROCESSADORES
+    Assim realizamos a implementação de duas arquiteturas de processadores diferentes, implementando instruções CISC, predicação, pipelines e loops em hardware. Além disso também aplicamos técnicas como loop Unroling.
+    
+    Todo esse processo foi extremamente interessante e cada etapa foi bem desafiadora.
 
 \end{document} 
