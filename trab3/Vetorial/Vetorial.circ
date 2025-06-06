@@ -345,7 +345,7 @@
     </comp>
     <comp lib="0" loc="(1830,860)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="RA_OUT_SR"/>
+      <a name="label" val="R1_OUT_SR"/>
       <a name="labelfont" val="SansSerif bold 5"/>
       <a name="width" val="8"/>
     </comp>
@@ -1201,11 +1201,6 @@
     <comp lib="3" loc="(770,260)" name="Comparator"/>
     <comp lib="4" loc="(1150,620)" name="ROM">
       <a name="appearance" val="logisim_evolution"/>
-      <a name="contents">addr/data: 8 8
-68 6c b4 cd a7 c9 d5 c4
-33 f5 96 c7 cb a1 b4 c4
-f5 96 c7 cb
-</a>
     </comp>
     <comp lib="4" loc="(1150,880)" name="ROM">
       <a name="addrWidth" val="4"/>
