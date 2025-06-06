@@ -28,4 +28,3 @@ s.and r1 r2
 s.movl 3
 s.add r2 r1
 s.and r1 r2
-
