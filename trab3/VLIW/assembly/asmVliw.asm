@@ -1,3 +1,8 @@
+nop 
+strue
+nop
+nop
+
 movh -1 
 nop
 sub r1 r1
@@ -15,7 +20,7 @@ add r1 r0
 
 nop
 nop
-nop
+sub r3 r1
 sub r2 r0
 
 st r2 r1 
@@ -37,11 +42,6 @@ movl 1
 nop
 nop
 add r1 r2
-
-nop
-nop
-nop
-add r3 r0
 
 nop
 nop
@@ -72,7 +72,6 @@ nop
 brzi -5
 nop
 nop
-
 
 movh -1
 nop
@@ -193,7 +192,6 @@ nop
 nop
 add r1 r0 
 nop
-
 
 ld r0 r1 
 nop
