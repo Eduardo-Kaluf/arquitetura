@@ -1019,6 +1019,7 @@
     \subsubsection{Rep}
     
     A instrução Rep recebe dois registradores, o primeiro (RA) dita a quantidade de vezes que as proximas N (RB) instruções devem ser executadas.
+    É importante ressaltar que nenhum branch pode ser passado dentro do loop de repetição da instrução REP.
     
     \subsection{Implementação e Organização}
 
@@ -1117,6 +1118,8 @@
     Assim conseguimos administrar o total de vezes que as instruções serão repetidas.
     
     Por fim, existe um terceiro registrador que guarda o endereço de início do loop, toda vez que o segundo registrador é zerado o valor desse registrador é passado para o PC, resetando o loop.
+
+    Devido a utilização do pipeline, caos dois loads sejam utilizados com menos de 5 instruções de distância, a quantidade de instruções a serem executadas deve ser incrementada em 1 antes de executar a REP.
 
     \subsection{Assembly}
 
