@@ -51,9 +51,9 @@
     
     \section{Apresentação}
     
-    Ao decorrer da disciplina aprendemos inúmeras maneiras de realizar a implementação de um processador, o modo como operam, seus prós e contras e seus contextos históricos. Sendo assim, neste trabalho iremos nos aprofundar em duas dessas maneiras sendo elas o VLIW e o processador Vetorial, o objetivo é a partir de uma ISA já predefinida (SAGUI) criar o projeto de ambos os processadores utilizando \href{https://github.com/logisim-evolution/logisim-evolution}{\textbf{Logisim}}, criar duas instruções adicionais para cada ISA e então realizar a execução de um programa assembly em cada um deles.
+    Ao decorrer da disciplina aprendemos inúmeras maneiras de realizar a implementação de um processador, os modos como operam, seus prós e contras e seus contextos históricos. Sendo assim, neste trabalho iremos nos aprofundar em duas dessas maneiras sendo elas o VLIW e o processador Vetorial. O objetivo é a partir de uma ISA já predefinida (SAGUI) criar o projeto de ambos os processadores utilizando \href{https://github.com/logisim-evolution/logisim-evolution}{\textbf{Logisim}}, e além disso, duas instruções adicionais para cada ISA e então realizar a execução de um programa assembly em cada um deles.
 
-    Para cada um dos processadores iremos utilizar uma ISA diferente que deriva do SAGUI, no caso do VLIW será o Sagui de rabo longo, já para o vetorial o Sagui em bando, além disso, o programa assembly teste consiste em fazer a soma de dois vetores com 12 posições e guardar os resultados na memória, com todos os vetores alinhados.
+    O processadores terão uma ISA diferente que deriva do SAGUI, no caso do VLIW será o Sagui de Rabo Longo, já para o vetorial o Sagui em Bando, além disso, o programa assembly teste consiste em fazer a soma de dois vetores com 12 posições e guardar os resultados na memória, com todos os vetores alinhados.
     Devido a maneira de como os processadores operam, cada um deles terá um programa Assembly diferente, porém que deverá apresentar o mesmo resultado.
 
     \section{VLIW}
@@ -61,13 +61,16 @@
     \subsection{Arquitetura}
 
     VLIW significa "Very long instruction Word" que se traduz para "palavra de instrução muito grande" e a ideia do processador gira exatamente em torno disso, basicamente, iremos ter uma palavra grande que carrega mais de uma instrução dentro dela, no nosso caso, 4 instruções, dessa forma o processador irá executa-las em paralelo aumentando o IPC total.
-    No VLIW a responsabilidade de evitar dependencias e escritas simultaneas ficam completamente na mão do compilador, o qual utiliza diversas técnicas como loop unroling e predicação a fim de diminuir a quantidade de NOPS necessários, fazendo com que o código seja executado de maneira mais otimizada.
+    No VLIW a responsabilidade de evitar dependências e escritas simultâneas fica completamente na mão do compilador, o qual utiliza diversas técnicas como loop unroling e predicação a fim de diminuir a quantidade de NOPS necessários, tornando a execução do código muito mais otimizado.
 
     \subsection{ISA}
 
     A ISA que iremos utilizar para o nosso VLIW é a Sagui de Rabo Longo (SRB) com algumas modificações para operar com predicação.
     A SRB consiste em uma ISA parecida com a REDUX-V, sendo tão compacta e amigável quanto para quem está iniciando no mundo da arquitetura de computadores. 
-    Ela possui 8 bits com 4 registradores de propósito geral e será endereçada de palavra a palavra ou seja de 4 em 4 bytes, além de definir 4 "lanes" diferentes, esses "lanes" são os tipos de operação (Branch, aritmética, lógica e etc...) que cada posição da palavra do VLIW poderá realizar. O opcode possui 4 bits, fazendo com que possamos operar 16 instruçoes diferentes, devido as modificações para predicação as instruções serão apresentadas mais a frente já em suas lanes específicas.
+    
+    Ela possui 8 bits com 4 registradores de propósito geral e será endereçada de palavra a palavra ou seja de 4 em 4 bytes, além de definir 4 "lanes" diferentes. Esses "lanes" são os tipos de operação (Branch, aritmética, lógica e etc...) que cada posição da palavra do VLIW poderá realizar.
+    
+    O opcode tem 4 bits, fazendo com que possamos operar 16 instruçoes diferentes, devido as modificações para predicação as instruções serão apresentadas mais a frente já em suas lanes específicas.
     
     Por padrão, os formatos das instruções e as lanes são definidas a seguir:
 
@@ -120,15 +123,17 @@
 
     \subsection{Motivações e Instruções}
 
-    Para este processador gostariamos de dar a maior quantidade de operações lógicas possíveis ao programador e uma facilidade maior para mexer com loops, adicionando outra instrução branch de controle. Além disso, para que a utilização de predicados seja viável, adaptamos a ISA de modo que ela possua um conjunto de instruções específicas para cada uma das lanes do VLIW e instruções para settar o predicado na parte de controle
+    Para este processador gostariamos de dar a maior quantidade de operações lógicas possíveis ao programador e uma facilidade maior para mexer com loops, adicionando outra instrução branch de controle.
+    
+    Além disso, para que a utilização de predicados seja viável, adaptamos a ISA de modo que ela possua um conjunto de instruções específicas para cada uma das lanes do VLIW e instruções para "settar" o predicado na parte de controle
 
     \subsubsection{Multi Operations}
 
-    A primeira escolha de instrução foi a de 'multioperações' (MULTIOPS), a qual é do tipo misto (INC) tendo um
-    registrador indicado e um imediato de 0 a 3.
+    A primeira escolha de instrução foi a de 'multioperações' (MULTIOPS), a qual é do tipo misto (M) tendo um
+    registrador indicado e um imediato que vai de 0 a 3.
 
-    Essa instrução funciona como um grupo de 4 instruções simples, sendo elas: NOT(logico), XOR, AND e XNOR. Todos
-    operando sobre R0 (que é sempre o registrador destino) e Ra (por Ra entenda registrador descrito na instrução).
+    Essa instrução funciona como um grupo de 4 instruções simples, sendo elas: NOT (lógico), XOR, AND e XNOR. Todos
+    operando sobre R0, que sempre será o registrador destino e Ra.
 
     Ela segue o formato OPCODE nos 4 últimos bits e nos outros 4 ela divide em metade para indicar o
     Ra e outra para um numero de 0 a 3, o qual indica qual operação deve ser realizada, NOT(0), XOR(1),
@@ -152,19 +157,20 @@
 
     \subsubsection{Move}
 
-    A instrução move faz uso da logica de copiar o valor de um registrador para outro, coisa que é 
-    útil em casos com grande limitação (como no nosso caso). Isso se dá por, por exemplo, só podermos alterar
-    diretamente o valor de R0 (usando as funções movh/movl).
-    Essa função faz Ra receber Rb, sobrescrevendo o conteudo anterior de Ra. Tal lógica retira a necessidade de
-    zerar um registrador para depois somar por exemplo.
+    A instrução move faz uso da lógica de copiar o valor de um registrador para outro, coisa que é 
+    útil em casos com grande limitação (como nesta arquitetura). Um exemplo disso é só podermos alterar diretamente o valor de R0 (usando as funções movh/movl).
+    
+    Essa função faz Ra receber Rb, sobrescrevendo o conteudo anterior de Ra. Tal lógica retira a necessidade de zerar um registrador para depois somar por exemplo.
 
     \subsubsection{Predicação}
 
     A fim de aproveitar que temos 16 instruções disponíveis por LANE, fizemos a implementação de um sistema de predicados em nosso processador.
     Temos 4 instruções responsáveis por controlar o valor do predicado (TRUE ou FALSE) e então todas as outras instruções possuem um espelho de si mesmas, a primeira funcionando quando o predicado é true e a segunda quando o mesmo é falso.
+
     Dessa forma o programador pode fazer o caminho verdadeiro de um if junto com o caminho falso, diminuindo a quantidade de dependencias no código.
     Vale a pena resaltar que uma das instruções é o STRUE, a ideia é que ela seja utilizada em conjunto com as instruções que executam o caminho verdadeiro quando nenhuma predicação está acontecendo, assim evitamos criar um terceiro espelho de cada instrução que funcione independente do valor do predicado
-    As 4 instruçoes estão apresentadas abaixo juntamente com a tabela final de cada uma das LANES    
+
+    As 4 instruçoes estão apresentadas abaixo, juntamente com a tabela final de cada uma das LANES: 
 
     \begin{table}[H]
       \centering
@@ -264,6 +270,7 @@
 
     Na implementação do nosso VLIW consumimos 4 instruções por vez, simulando uma palavra grande dessa maneira, elas são então passadas para os controles que já definem se a instrução deve ou não ser executada com base no predicado.
     Na ULA temos uma saída que retorna zero em todos os 8 bits, utilizada em casos em que a instrução não deve ser executada pelo predicado ou casos de nop. Para cada LANE existe uma UL que faz as lógicas necessárias a fim de retornar o que cada instrução precisa.
+
     O banco de registradores utiliza varios DEMUXes para abranger a escrita em qualquer registrador independente da LANE que envia o dado.
 
     \begin{table}[H]
@@ -284,6 +291,13 @@
         \multicolumn{1}{|c}{\textbf{Nop}}       & \multicolumn{1}{c|}{\textbf{111}}     \\ \hline
       \end{tabular}
     \end{table}
+
+    \begin{figure}[h]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{ULA: Diagrama de Blocos}}
+      \centering
+      \noindent\hspace*{0cm}\includegraphics[scale=0.5]{./datapaths/vliw/ulaVliw.png}
+    \end{figure}
 
     \begin{table}[H]
       \captionsetup{labelformat=empty, skip=0pt}
@@ -375,30 +389,36 @@
       }
     \end{table}
 
+    \begin{figure}[h]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Processador VLIW: Datapath}}
+      \centering
+      \noindent\hspace*{-3cm}\includegraphics[scale=0.4]{./datapaths/vliw/datapathVliw.png}
+    \end{figure}
+
     \subsubsection{Multi Operations}
 
-    A instrução Multi Operations foi implementada dentro da Ula e pode ser pensada como uma extensão da mesma. A Ula passou a receber 2 bits de controle a mais, vindos da MULT-OPS, que definem qual operação fazer e então, com base no código do Op\_ula é decidido se será escolhida ou não.
-    MULT-OPS opera fixamente sobre o R0, o resto do caminho é idêntico a qualquer outra operação Lógica/Aritmética
-
+    A instrução Multi Operations foi implementada dentro da Ula e pode ser pensada como uma extensão da mesma. A Ula passou a receber 2 bits de controle a mais, vindos da MULT-OPS, que definem qual operação fazer e então, com base no código do OP\_ULA é decidido se será escolhida ou não.
+    MULT-OPS opera fixamente sobre o R0, o resto do caminho é idêntico a qualquer outra operação Lógica/Aritmética.
 
     \begin{table}[H]
       \rowcolors{1}{white}{gray!20} 
       \centering
-      \caption{\textbf{Operações do Predicado: Controle}}
+      \caption{\textbf{Multi Operations: Controle}}
       \begin{tabular}{{|c c|}}
         \hline
         \rowcolor{gray!50}
-        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_ULA}} \\ \hline
-        \multicolumn{1}{|c}{\textbf{Not}}      & \multicolumn{1}{c|}{\textbf{00}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Xor}}      & \multicolumn{1}{c|}{\textbf{01}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{And}}      & \multicolumn{1}{c|}{\textbf{10}}      \\ \hline
-        \multicolumn{1}{|c}{\textbf{Xnor}}     & \multicolumn{1}{c|}{\textbf{11}}      \\ \hline
+        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{MULT\_OPS}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Not}}      & \multicolumn{1}{c|}{\textbf{00}}        \\ \hline
+        \multicolumn{1}{|c}{\textbf{Xor}}      & \multicolumn{1}{c|}{\textbf{01}}        \\ \hline
+        \multicolumn{1}{|c}{\textbf{And}}      & \multicolumn{1}{c|}{\textbf{10}}        \\ \hline
+        \multicolumn{1}{|c}{\textbf{Xnor}}     & \multicolumn{1}{c|}{\textbf{11}}        \\ \hline
       \end{tabular}
     \end{table}
 
     \subsubsection{Move}
 
-    Para a Instrução Move, simplesmente retornamos o valor de RB para o banco de registradores, este, com base se MOVE foi settado ou não passa o valor para o RA
+    Para a Instrução Move, simplesmente retornamos o valor de RB para o banco de registradores, este, com base se o sinal de controle "MOVE" foi settado ou não, sobreescreve o valor para RA.
 
     \subsubsection{Predicação}
 
@@ -408,7 +428,7 @@
     \begin{table}[H]
       \rowcolors{1}{white}{gray!20} 
       \centering
-      \caption{\textbf{Multi Operations: Controle}}
+      \caption{\textbf{Operações do Predicado: Controle}}
       \begin{tabular}{{|c c|}}
         \hline
         \rowcolor{gray!50}
@@ -924,22 +944,24 @@
 
     \subsection{Arquitetura}
 
-    No processador vetorial temos 2 caminhos que as instruções podem seguir, o caminho Escalar, que funciona como um monociclo comum e o caminho Vetorial, este possui 4 "lanes" que executam a mesma instrução, cada uma dessas lanes possui seu próprio banco de registradores, memória e ula.
-    A sacada do processador vetorial é que cada uma das lanes possui um ID fixo nos seus respectivos R0s, o que possibilita fazer preenchimento e operações mais eficientes com vetores.
+    No processador vetorial existem 2 caminhos que as instruções podem seguir, o caminho Scalar, que funciona como um monociclo comum e o caminho Vetorial, este possui 4 "lanes" que executam a mesma instrução, cada uma dessas lanes possui seu próprio banco de registradores, memória e ula.
+
+    A sacada do processador vetorial é que essas lanes possuem um ID fixo nos seus respectivos R0s, o que possibilita fazer preenchimento e operações mais eficientes com vetores.
     É importante ressaltar que não existe instrução que atua de forma escalar e vetorial ao mesmo tempo.
 
     \subsection{ISA}
 
     A ISA que iremos utilizar para o nosso Vetorial é a Sagui em Bando (SB).
     A SB consiste em uma ISA também parecida com reduxV e segue as seguintes especificações:
-    Ela possui 8 bits com 3 registradores de propósito geral para a área scalar, e R0 fixo em 0 além de uma memória exclusiva. A parte vetorial é muito semelhante, porém o R0 varia entre 0 e 3.
-    Assim como o reduxV teremos 4 bits para os opcodes
+
+    Ela possui 8 bits com 3 registradores de propósito geral para a área scalar, e R0 fixo em 0 além de uma memória exclusiva. A parte vetorial é muito semelhante, porém o R0 varia entre 0 e 3 em suas respectivas lanes.
+    Assim como o reduxV teremos 4 bits para os opcodes.
     
-    Por padrão, os formatos das instruções são os mesmos do Sagui de Rabo Longo
+    Por padrão, os formatos das instruções são os mesmos do Sagui de Rabo Longo.
 
     \subsection{Motivações e Instruções}
 
-    Para este processador tentamos dar mais opções à parte scalar, facilitando a gama de operações e o número de operações, fazendo com que seja mais fácil interagir com loops e como consequencia mais fácil de utilizar a parte vetorial do processador.
+    Para este processador tentamos dar mais opções à parte Scalar, facilitando a gama de operações, fazendo com que seja mais fácil interagir com loops e como consequência mais fácil de utilizar a parte vetorial do processador.
     Mais que isso, fizemos uma instrução que opera um loop no próprio hardware, dando uma liberdade grande ao programador de como trabalhar com nossa ISA.
 
     \begin{table}[H]
@@ -966,7 +988,7 @@
         \multicolumn{1}{|c|}{\textbf{1011}}   & \multicolumn{1}{c|}{\textbf{I}}     & \multicolumn{1}{c|}{\textbf{v.movl}}    & \multicolumn{1}{c|}{\textbf{Move Low}}                & \multicolumn{1}{c|}{\textbf{VR[1] = {VR[1](7:4), Imm.}}}                \\ \hline
         \multicolumn{1}{|c|}{\textbf{1100}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{v.add}}     & \multicolumn{1}{c|}{\textbf{Add}}                     & \multicolumn{1}{c|}{\textbf{VR[ra] = VR[ra] \texttt{+} VR[rb]}}         \\ \hline
         \multicolumn{1}{|c|}{\textbf{1101}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{v.sub}}     & \multicolumn{1}{c|}{\textbf{Sub}}                     & \multicolumn{1}{c|}{\textbf{VR[ra] = VR[ra] \texttt{-} VR[rb]}}         \\ \hline
-        \multicolumn{1}{|c|}{\textbf{1110}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{s.inc-ops}} & \multicolumn{1}{c|}{\textbf{Inc-Ops}}                 & \multicolumn{1}{c|}{\textbf{SR[ra] = [RA] OP [RB] \texttt{||} OP [RA]}} \\ \hline
+        \multicolumn{1}{|c|}{\textbf{1110}}   & \multicolumn{1}{c|}{\textbf{M}}     & \multicolumn{1}{c|}{\textbf{s.inc-ops}} & \multicolumn{1}{c|}{\textbf{Inc-Ops}}                 & \multicolumn{1}{c|}{\textbf{SR[ra] = [RA] OP [R1] \texttt{||} OP [RA]}} \\ \hline
         \multicolumn{1}{|c|}{\textbf{1111}}   & \multicolumn{1}{c|}{\textbf{R}}     & \multicolumn{1}{c|}{\textbf{s.rep}}     & \multicolumn{1}{c|}{\textbf{Rep}}                     & \multicolumn{1}{c|}{\textbf{Repeat Next RB Instructions RA times}}      \\ \hline
       \end{tabular}
     \end{table}
@@ -993,12 +1015,38 @@
 
     \subsubsection{Rep}
     
-    A instrução Rep recebe dois registradores, o primeiro (RA) dita a quantidade de vezes que as proximas n instruções (RB) devem ser executadas.
+    A instrução Rep recebe dois registradores, o primeiro (RA) dita a quantidade de vezes que as proximas N (RB) instruções devem ser executadas.
     
     \subsection{Implementação e Organização}
 
     Implementamos o processador vetorial de modo que a leitura da instrução passa um NOP para a parte scalar ou para a parter vetorial, dependendo do que foi recebido. 
-    Além do mais implementamos um pipeline com 5 subdivisões utilizando uma Unidade hazard, o qual atua tanto na parte scalar quanto na parte vetorial.
+    Além do mais, um pipeline com 5 subdivisões com uma Unidade hazard e que realiza Data-Forwarding, o qual atua tanto na parte scalar quanto na parte vetorial.
+
+    \begin{table}[H]
+      \rowcolors{1}{white}{gray!20} 
+      \centering
+      \caption{\textbf{ULA: Controle}}
+      \begin{tabular}{{|c c|}}
+        \hline
+        \rowcolor{gray!50}
+        \multicolumn{1}{|c}{\textbf{Operação}} & \multicolumn{1}{c|}{\textbf{OP\_ULA}} \\ \hline
+        \multicolumn{1}{|c}{\textbf{Inc-Ops}}  & \multicolumn{1}{c|}{\textbf{000}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{Empty}}    & \multicolumn{1}{c|}{\textbf{001}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{Movh}}     & \multicolumn{1}{c|}{\textbf{010}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{Movl}}     & \multicolumn{1}{c|}{\textbf{011}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{Add}}      & \multicolumn{1}{c|}{\textbf{100}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{Sub}}      & \multicolumn{1}{c|}{\textbf{101}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{And}}      & \multicolumn{1}{c|}{\textbf{110}}     \\ \hline
+        \multicolumn{1}{|c}{\textbf{Empty}}    & \multicolumn{1}{c|}{\textbf{111}}     \\ \hline
+      \end{tabular}
+    \end{table}
+
+    \begin{figure}[h]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{ULA: Diagrama de Blocos}}
+      \centering
+      \noindent\hspace*{0cm}\includegraphics[scale=0.5]{./datapaths/vetorial/ulaVetorial.png}
+    \end{figure}
 
     \begin{table}[H]
       \captionsetup{labelformat=empty, skip=0pt}
@@ -1029,10 +1077,17 @@
         \end{tabular}
       }
     \end{table}
+      \begin{figure}[h]
+      \captionsetup{labelformat=empty, skip=0pt}
+      \caption{\textbf{Processador Vetorial: Datapath}}
+      \centering
+      \noindent\hspace*{-1.5cm}\includegraphics[scale=0.4]{./datapaths/vetorial/datapathVetorial.png}
+    \end{figure}
+
 
     \subsubsection{Inc-Ops}
 
-    Uma novo controle chamado inc-ops foi adicionado a fim de comtemplar a escolha da operação do inc-ops dentro da ula, ou seja, temos um mux para escolher a operação do Inc-Ops e então o seu resultado é passado para o mux normal da Ula.
+    Uma novo controle chamado INC-OPS foi adicionado a fim de comtemplar a escolha da operação do Inc-Ops dentro da ula, ou seja, temos um mux para escolher a operação do Inc-Ops e então o seu resultado é passado para o mux normal da Ula, que segue o caminho padrão de uma instrução aritmética/lógica.
 
     \begin{table}[H]
       \rowcolors{1}{white}{gray!20} 
@@ -1051,10 +1106,12 @@
 
     \subsubsection{Rep}
 
-    A instrução Rep utiliza de alguns registradores a parte para saber quando deve parar de realizar a repetição. Quando ela é processada, um desses registradores recebe a quantidade de vezes que as proximas instruções devem ser repetidas, um outro registrador recebe quantas instruções devem ser processadas.
-    Todo clock dimninui o segundo registrador em 1 e quando ele chega em zero ele é retornado para a quantidade de instruções que devem ser repetidas e o primeiro tem seu valor reduzido em 1.
+    A instrução Rep utiliza de alguns registradores a parte para saber quando deve parar de realizar a repetição. Quando ela é processada, um desses registradores recebe a quantidade de vezes que as próximas instruções devem ser repetidas, um outro registrador recebe quantas instruções devem ser processadas.
+
+    Todo tick do clock diminui o segundo registrador em 1 unidade, quando ele chega em zero o número de instruções que devem ser repetidas é reescrito nele e o primeiro registrador tem seu valor reduzido em 1.
     Assim conseguimos administrar o total de vezes que as instruções serão repetidas.
-    Por fim, existe um terceiro registrador que guarda o endereço de inicio do loop, toda vez que o segundo registrador é zerado, o valor desse registrador é passado para o PC
+    
+    Por fim, existe um terceiro registrador que guarda o endereço de início do loop, toda vez que o segundo registrador é zerado o valor desse registrador é passado para o PC, resetando o loop.
 
     \subsection{Assembly}
 
@@ -1068,8 +1125,8 @@
 
     \section{Conclusão}
 
-    Assim realizamos a implementação de duas arquiteturas de processadores diferentes, implementando instruções CISC, predicação, pipelines e loops em hardware. Além disso também aplicamos técnicas como loop Unroling.
+    Assim realizamos a implementação de duas arquiteturas de processadores diferentes, implementando instruções CISC, predicação, pipelines e loops em hardware. Além disso também aplicamos técnicas como loop Unrolling.
     
-    Todo esse processo foi extremamente interessante e cada etapa foi bem desafiadora.
+    Todo esse processo foi extremamente interessante e cada etapa foi muito desafiadora de ser cumprida.
 
 \end{document} 

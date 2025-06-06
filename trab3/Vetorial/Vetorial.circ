@@ -1201,6 +1201,19 @@
     <comp lib="3" loc="(770,260)" name="Comparator"/>
     <comp lib="4" loc="(1150,620)" name="ROM">
       <a name="appearance" val="logisim_evolution"/>
+      <a name="contents">addr/data: 8 8
+68 6c 21 3e 4d 20 33 49
+da df a0 bb c9 cd a6 b4
+cd a0 dc d8 7b 20 31 9b
+dd d9 59 21 34 71 4d 20
+33 49 4d 4d a1 b8 cd da
+bf c9 d8 a0 20 b4 7b 20
+31 59 9b dd d9 22 3e 71
+21 3a 4d 20 33 49 7b 20
+31 59 bc 8b cd 87 c9 a0
+bc cd 9b dd dd b4 dd 23
+3e 71 25 34 71
+</a>
     </comp>
     <comp lib="4" loc="(1150,880)" name="ROM">
       <a name="addrWidth" val="4"/>
