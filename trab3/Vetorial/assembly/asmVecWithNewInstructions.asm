@@ -43,7 +43,7 @@ v.add r3 r1
 v.add r3 r0 ;; endereço do Vetor A
 v.sub r1 r1
 
-s.movl -3
+s.movl -2
 s.add r2 r1
 s.movl 2
 s.rep r1 r2
